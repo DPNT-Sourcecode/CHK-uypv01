@@ -41,9 +41,6 @@ namespace BeFaster.App.Solutions.CHK
                     {
                         totalAs += item == itemA ? 1 : 0;
                         totalBs += item == itemB ? 1 : 0;
-                    }
-                    else
-                    {
                         total += priceTable[item];
                     }
 
@@ -53,27 +50,36 @@ namespace BeFaster.App.Solutions.CHK
             if (totalAs != 0)
             {
                 int outOfOfferA = totalAs % specialOffers[itemA].Item1;
+                int offerATotal = totalAs / specialOffers[itemA].Item1 * specialOffers[itemA].Item2;
+
                 if (outOfOfferA == 0)
                 {
-                    total += (totalAs / specialOffers[itemA].Item1) * specialOffers[itemA].Item2;
+                    total += offerATotal;
                 }
                 else
                 {
-                    total += ((totalAs / specialOffers[itemA].Item1) * specialOffers[itemA].Item2) + (outOfOfferA * priceTable[itemA]);
+                    total += offerATotal + (outOfOfferA * priceTable[itemA]);
                 }
             }
 
             if (totalBs != 0)
             {
                 int outOfOfferB = totalBs % specialOffers[itemB].Item1;
+                int offerBTotal = totalBs / specialOffers[itemB].Item1 * specialOffers[itemB].Item2;
+
+                if (outOfOfferB == 0)
+                {
+                    total += offerBTotal;
+                }
+                else
+                {
+                    total += offerBTotal + (outOfOfferB * priceTable[itemB]);
+                }
             }
-
-
-
-            total += totalAs == specialOffers[itemA].Item1 ? specialOffers[itemA].Item2 : 
 
             return total;
         }
     }
 }
+
 
