@@ -37,7 +37,7 @@ namespace BeFaster.App.Solutions.CHK
                 }
                 else
                 {
-                    if (specialOffers.ContainsKey(item))
+                    if (priceTable.ContainsKey(item))
                     {
                         if (item == itemA || item == itemB)
                         {
@@ -88,6 +88,7 @@ namespace BeFaster.App.Solutions.CHK
         }
     }
 }
+
 
 
 
