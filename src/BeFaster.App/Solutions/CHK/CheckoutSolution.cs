@@ -1,4 +1,5 @@
 ﻿using BeFaster.Runner.Exceptions;
+using System;
 using System.Collections.Generic;
 
 namespace BeFaster.App.Solutions.CHK
@@ -11,17 +12,22 @@ namespace BeFaster.App.Solutions.CHK
             int totalAs = 0;
             int totalBs = 0;
 
+            char itemA = 'A';
+            char itemB = 'B';
+            char itemC = 'C';
+            char itemD = 'D';
+
             Dictionary<char, int> priceTable = new Dictionary<char, int>()
             {
-                {'A', 50 },
-                {'B', 30 },
-                {'C', 20 },
-                {'D', 15 }
+                {itemA, 50 },
+                {itemB, 30 },
+                {itemC, 20 },
+                {itemD, 15 }
             };
 
-            List<char> specialOfferItems = new List<char>();
-            specialOfferItems.Add('A');
-            specialOfferItems.Add('B');
+            Dictionary<char, Tuple<int, int>> specialOffers = new Dictionary<char, Tuple<int, int>>();
+            specialOffers.Add(itemA, new Tuple<int, int>(3, 130));
+            specialOffers.Add(itemB, new Tuple<int, int>(2, 45));
 
             foreach (char item in skus)
             {
@@ -31,10 +37,10 @@ namespace BeFaster.App.Solutions.CHK
                 }
                 else
                 {
-                    if (specialOfferItems.Contains(item))
+                    if (specialOffers.ContainsKey(item))
                     {
-                        totalAs += item == 'A' ? 1 : 0;
-                        totalBs += item == 'B' ? 1 : 0;
+                        totalAs += item == itemA ? 1 : 0;
+                        totalBs += item == itemB ? 1 : 0;
                     }
                     else
                     {
@@ -44,7 +50,30 @@ namespace BeFaster.App.Solutions.CHK
                 }
             }
 
+            if (totalAs != 0)
+            {
+                int outOfOfferA = totalAs % specialOffers[itemA].Item1;
+                if (outOfOfferA == 0)
+                {
+                    total += (totalAs / specialOffers[itemA].Item1) * specialOffers[itemA].Item2;
+                }
+                else
+                {
+                    total += ((totalAs / specialOffers[itemA].Item1) * specialOffers[itemA].Item2) + (outOfOfferA * priceTable[itemA]);
+                }
+            }
+
+            if (totalBs != 0)
+            {
+                int outOfOfferB = totalBs % specialOffers[itemB].Item1;
+            }
+
+
+
+            total += totalAs == specialOffers[itemA].Item1 ? specialOffers[itemA].Item2 : 
+
             return total;
         }
     }
 }
+
