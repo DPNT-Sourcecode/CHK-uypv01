@@ -39,9 +39,16 @@ namespace BeFaster.App.Solutions.CHK
                 {
                     if (specialOffers.ContainsKey(item))
                     {
-                        totalAs += item == itemA ? 1 : 0;
-                        totalBs += item == itemB ? 1 : 0;
-                        total += priceTable[item];
+                        if (item == itemA || item == itemB)
+                        {
+                            totalAs += item == itemA ? 1 : 0;
+                            totalBs += item == itemB ? 1 : 0;
+                        }
+                        else
+                        {
+                            total += priceTable[item];
+                        }
+                        
                     }
 
                 }
@@ -81,5 +88,6 @@ namespace BeFaster.App.Solutions.CHK
         }
     }
 }
+
 
 
