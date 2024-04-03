@@ -27,4 +27,3 @@ namespace BeFaster.App.Solutions.CHK
         List<Dictionary<int, int>> SpecialOffers { get; }
     }
 }
-
