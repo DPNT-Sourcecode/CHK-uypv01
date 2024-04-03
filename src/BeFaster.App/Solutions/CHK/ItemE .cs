@@ -6,17 +6,16 @@ using System.Threading.Tasks;
 
 namespace BeFaster.App.Solutions.CHK
 {
-    public class ItemB: IItem
+    public class ItemE: IItem
     {
-        private const char itemCode = 'B';
+        private const char itemCode = 'E';
 
-        private const int itemPrice = 30;
+        private const int itemPrice = 15;
 
         public char ItemCode { get { return itemCode; } }
 
         public int ItemPrice { get { return itemPrice; } }
 
-        public Dictionary<int, int> SpecialOffers { get; } = new Dictionary<int, int>();
+        public List<Dictionary<int, int>> SpecialOffers { get; } = new List<Dictionary<int, int>>();
     }
 }
-

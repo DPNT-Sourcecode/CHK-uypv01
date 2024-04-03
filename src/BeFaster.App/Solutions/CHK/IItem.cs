@@ -24,6 +24,7 @@ namespace BeFaster.App.Solutions.CHK
         /// <summary>
         /// Special offers that apply to the item.
         /// </summary>
-        List<Dictionary<int, int>> SpecialOffers { get; }
+        Dictionary<int, int> SpecialOffers { get; }
     }
 }
+
