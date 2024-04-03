@@ -155,7 +155,6 @@ namespace BeFaster.App.Solutions.CHK
                 }
             }
 
-
             return totalPrice;
         }
 
@@ -183,6 +182,3 @@ namespace BeFaster.App.Solutions.CHK
 
     }
 }
-
-
-
