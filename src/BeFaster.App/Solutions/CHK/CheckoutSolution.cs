@@ -52,40 +52,44 @@ namespace BeFaster.App.Solutions.CHK
 
             foreach (var item in priceTable)
             {
-                if (item.Key.SpecialOffers.Count == 0)
+                if (itemQuantities[item.Key.ItemCode] != 0)
                 {
-                    total += item.Value * itemQuantities[item.Key.ItemCode];
-                }
-                else if (item.Key.SpecialOffers.Count == 1)
-                {
-                    int min = item.Key.SpecialOffers[0].Quantity;
-                    int offerValue = item.Key.SpecialOffers[0].Price;
-                    bool match = false;
-                    string matchItem = "";
-
-                    foreach (var i in priceTable)
+                    if (item.Key.SpecialOffers.Count == 0)
                     {
-                        if (i.Value == offerValue)
-                        {
-                            match = true;
-                            matchItem = i.Key.ItemCode.ToString();
-                        }
+                        total += item.Value * itemQuantities[item.Key.ItemCode];
                     }
-
-                    if (match && skus.Contains(matchItem))
+                    else if (item.Key.SpecialOffers.Count == 1)
                     {
-                        ComputeBOGOFDiscount(itemQuantities[item.Key.ItemCode], item.Value, min, offerValue);
+                        int min = item.Key.SpecialOffers[0].Quantity;
+                        int offerValue = item.Key.SpecialOffers[0].Price;
+                        bool match = false;
+                        string matchItem = "";
+
+                        foreach (var i in priceTable)
+                        {
+                            if (i.Value == offerValue)
+                            {
+                                match = true;
+                                matchItem = i.Key.ItemCode.ToString();
+                            }
+                        }
+
+                        if (match && skus.Contains(matchItem))
+                        {
+                            total += ComputeBOGOFDiscount(itemQuantities[item.Key.ItemCode], item.Value, min, offerValue);
+                        }
+                        else
+                        {
+                            total += ComputeDiscountPriceSingle(itemQuantities[item.Key.ItemCode], item.Value, min, offerValue);
+                        }
                     }
                     else
                     {
-                        ComputeDiscountPriceSingle(itemQuantities[item.Key.ItemCode], item.Value, min, offerValue);
-                    }   
+                        item.Key.SpecialOffers = item.Key.SpecialOffers.OrderBy(i => i.Quantity + i.Price).ToList();
+                        total += ComputeDiscountPriceMulti(itemQuantities[item.Key.ItemCode], item.Value, item.Key.SpecialOffers);
+                    }
                 }
-                else
-                {
-                    item.Key.SpecialOffers.OrderBy(i => i.Quantity + i.Price).ToList();
-                    ComputeDiscountPriceMulti(itemQuantities[item.Key.ItemCode], item.Value, item.Key.SpecialOffers);
-                }
+                
             }
 
             return total;
@@ -163,3 +167,4 @@ namespace BeFaster.App.Solutions.CHK
 
     }
 }
+
