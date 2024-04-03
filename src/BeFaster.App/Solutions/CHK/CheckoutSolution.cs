@@ -1,6 +1,7 @@
 ﻿using BeFaster.Runner.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BeFaster.App.Solutions.CHK
 {
@@ -54,7 +55,12 @@ namespace BeFaster.App.Solutions.CHK
                 {
                     total += item.Value * itemQuantities[item.Key.ItemCode];
                 }
-                else if (itemQuantities[item.Key.ItemCode] is )
+                else if (item.Key.SpecialOffers.Count == 1)
+                {
+                    int min = item.Key.SpecialOffers.Keys.Single();
+                    ComputeDiscountPriceSingle(itemQuantities[item.Key.ItemCode], item.Value, min, item.Key.SpecialOffers[min]);
+                }
+                else
                 {
 
                 }
@@ -117,6 +123,29 @@ namespace BeFaster.App.Solutions.CHK
             return totalPrice;
         }
 
+        public static int ComputeBOGOFDiscount(int n, int price, int min, int offerPrice)
+        {
+            int nOutOfOffer = n % min;
+            int totalPrice = 0;
+
+            if (n >= min && nOutOfOffer == 0)
+            {
+                totalPrice = n / min * offerPrice;
+            }
+            else if (n > min)
+            {
+                n -= nOutOfOffer;
+                totalPrice += (nOutOfOffer * price) + (n / min * offerPrice);
+            }
+            else
+            {
+                totalPrice = n * price;
+            }
+
+            return totalPrice;
+        }
+
 
     }
 }
+
