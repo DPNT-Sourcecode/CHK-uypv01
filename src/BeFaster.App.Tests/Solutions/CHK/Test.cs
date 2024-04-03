@@ -16,7 +16,9 @@ namespace BeFaster.App.Tests.Solutions.CHK
             { "A" },
             { "B" },
             { "AAAABC" },
-            { "BBEE" }
+            { "BBEE" },
+            { "AAAAAAAA" },
+            { "AAAAAAAAA" }
         };
 
         [Test]
@@ -26,7 +28,10 @@ namespace BeFaster.App.Tests.Solutions.CHK
             Assert.AreEqual(CheckoutSolution.ComputePrice(testStr[1]), 30);
             Assert.AreEqual(CheckoutSolution.ComputePrice(testStr[2]), 230);
             Assert.AreEqual(CheckoutSolution.ComputePrice(testStr[3]), 95);
+            Assert.AreEqual(CheckoutSolution.ComputePrice(testStr[4]), 330);
+            Assert.AreEqual(CheckoutSolution.ComputePrice(testStr[5]), 380);
         }
 
     }
 }
+
