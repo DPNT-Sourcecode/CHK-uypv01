@@ -12,18 +12,20 @@ namespace BeFaster.App.Solutions.CHK
             int totalAs = 0;
             int totalBs = 0;
 
-            char itemA = 'A';
-            char itemB = 'B';
-            char itemC = 'C';
-            char itemD = 'D';
+            ItemA itemA = new ItemA();
+            ItemB itemB = new ItemB();
+            ItemC itemC = new ItemC();
+            ItemD itemD = new ItemD();
+            ItemE itemE = new ItemE();
 
-            Dictionary<char, int> priceTable = new Dictionary<char, int>()
-            {
-                {itemA, 50 },
-                {itemB, 30 },
-                {itemC, 20 },
-                {itemD, 15 }
-            };
+            itemA.SpecialOffers.Add(3, 130);
+            itemA.SpecialOffers.Add(5, 200);
+
+            itemB.SpecialOffers.Add(2, 45);
+
+            itemE.
+
+            itemA.SpecialOffers.Add(new Dictionary<int, int>(3, 130));
 
             Dictionary<char, Tuple<int, int>> specialOffers = new Dictionary<char, Tuple<int, int>>();
             specialOffers.Add(itemA, new Tuple<int, int>(3, 130));
@@ -88,3 +90,4 @@ namespace BeFaster.App.Solutions.CHK
         }
     }
 }
+
