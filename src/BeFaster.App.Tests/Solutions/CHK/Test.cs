@@ -14,7 +14,9 @@ namespace BeFaster.App.Tests.Solutions.CHK
         List<string> testStr = new List<string>()
         {
             { "A" },
-            { "B" }
+            { "B" },
+            { "AAAABC" },
+            { "BBEE" }
         };
 
         [Test]
@@ -22,8 +24,10 @@ namespace BeFaster.App.Tests.Solutions.CHK
         {
             Assert.AreEqual(CheckoutSolution.ComputePrice(testStr[0]), 50);
             Assert.AreEqual(CheckoutSolution.ComputePrice(testStr[1]), 30);
-
+            Assert.AreEqual(CheckoutSolution.ComputePrice(testStr[2]), 230);
+            Assert.AreEqual(CheckoutSolution.ComputePrice(testStr[3]), 95);
         }
 
     }
 }
+
