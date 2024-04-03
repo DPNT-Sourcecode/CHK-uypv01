@@ -36,6 +36,9 @@
     <Reference Include="Apache.NMS.ActiveMQ, Version=1.7.2.4108, Culture=neutral, PublicKeyToken=82756feee3957618, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Apache.NMS.ActiveMQ.1.7.2\lib\net40\Apache.NMS.ActiveMQ.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework, Version=3.8.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NUnit.3.8.1\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\RestSharp.105.2.3\lib\net45\RestSharp.dll</HintPath>
     </Reference>

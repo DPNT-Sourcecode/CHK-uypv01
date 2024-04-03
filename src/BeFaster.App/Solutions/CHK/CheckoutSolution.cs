@@ -1,6 +1,7 @@
 ﻿using BeFaster.Runner.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BeFaster.App.Solutions.CHK
 {
@@ -8,83 +9,176 @@ namespace BeFaster.App.Solutions.CHK
     {
         public static int ComputePrice(string skus)
         {
+            ItemA itemA = new ItemA();
+            ItemB itemB = new ItemB();
+            ItemC itemC = new ItemC();
+            ItemD itemD = new ItemD();
+            ItemE itemE = new ItemE();
+
             int total = 0;
-            int totalAs = 0;
-            int totalBs = 0;
 
-            char itemA = 'A';
-            char itemB = 'B';
-            char itemC = 'C';
-            char itemD = 'D';
-
-            Dictionary<char, int> priceTable = new Dictionary<char, int>()
+            Dictionary<IItem, int> priceTable = new Dictionary<IItem, int>()
             {
-                {itemA, 50 },
-                {itemB, 30 },
-                {itemC, 20 },
-                {itemD, 15 }
+                { itemA, itemA.ItemPrice },
+                { itemB, itemB.ItemPrice },
+                { itemC, itemC.ItemPrice },
+                { itemD, itemD.ItemPrice },
+                { itemE, itemE.ItemPrice }
             };
 
-            Dictionary<char, Tuple<int, int>> specialOffers = new Dictionary<char, Tuple<int, int>>();
-            specialOffers.Add(itemA, new Tuple<int, int>(3, 130));
-            specialOffers.Add(itemB, new Tuple<int, int>(2, 45));
+            Dictionary<char, int> itemQuantities = new Dictionary<char, int>();
+            foreach (var item in priceTable)
+            {
+                itemQuantities.Add(item.Key.ItemCode, 0);
+            }
+
+            itemA.SpecialOffers.Add(new Offer() { Quantity = 3, Price = 130 } );
+            itemA.SpecialOffers.Add(new Offer() { Quantity = 5, Price = 200 } );
+            itemB.SpecialOffers.Add(new Offer() { Quantity = 2, Price = 45 } );
+            itemE.SpecialOffers.Add(new Offer() { Quantity = 2, Price = itemB.ItemPrice } );
+
 
             foreach (char item in skus)
             {
-                if (!priceTable.ContainsKey(item))
+                if (!itemQuantities.ContainsKey(item))
                 {
                     return -1;
                 }
-                else
+                else if (itemQuantities.ContainsKey(item))
                 {
-                    if (priceTable.ContainsKey(item))
+                    itemQuantities[item] += 1;
+                }
+            }
+
+            foreach (var item in priceTable)
+            {
+                if (itemQuantities[item.Key.ItemCode] != 0)
+                {
+                    if (item.Key.SpecialOffers.Count == 0)
                     {
-                        if (item == itemA || item == itemB)
+                        total += item.Value * itemQuantities[item.Key.ItemCode];
+                    }
+                    else if (item.Key.SpecialOffers.Count == 1)
+                    {
+                        int min = item.Key.SpecialOffers[0].Quantity;
+                        int offerValue = item.Key.SpecialOffers[0].Price;
+                        bool match = false;
+                        string matchItem = "";
+
+                        foreach (var i in priceTable)
                         {
-                            totalAs += item == itemA ? 1 : 0;
-                            totalBs += item == itemB ? 1 : 0;
+                            if (i.Value == offerValue)
+                            {
+                                match = true;
+                                matchItem = i.Key.ItemCode.ToString();
+                                break;
+                            }
+                        }
+
+                        if (match && skus.Contains(matchItem))
+                        {
+                            total += ComputeBOGOFDiscount(itemQuantities[item.Key.ItemCode], item.Value, min, offerValue);
+                        }
+                        else if (match && !skus.Contains(matchItem))
+                        {
+                            total += item.Value * itemQuantities[item.Key.ItemCode];
                         }
                         else
                         {
-                            total += priceTable[item];
+                            total += ComputeDiscountPriceSingle(itemQuantities[item.Key.ItemCode], item.Value, min, offerValue);
                         }
-                        
                     }
-
+                    else
+                    {
+                        item.Key.SpecialOffers = item.Key.SpecialOffers.OrderBy(i => i.Price / i.Quantity).ToList();
+                        total += ComputeDiscountPriceMulti(itemQuantities[item.Key.ItemCode], item.Value, item.Key.SpecialOffers);
+                    }
                 }
-            }
-
-            if (totalAs != 0)
-            {
-                int outOfOfferA = totalAs % specialOffers[itemA].Item1;
-                int offerATotal = totalAs / specialOffers[itemA].Item1 * specialOffers[itemA].Item2;
-
-                if (outOfOfferA == 0)
-                {
-                    total += offerATotal;
-                }
-                else
-                {
-                    total += offerATotal + (outOfOfferA * priceTable[itemA]);
-                }
-            }
-
-            if (totalBs != 0)
-            {
-                int outOfOfferB = totalBs % specialOffers[itemB].Item1;
-                int offerBTotal = totalBs / specialOffers[itemB].Item1 * specialOffers[itemB].Item2;
-
-                if (outOfOfferB == 0)
-                {
-                    total += offerBTotal;
-                }
-                else
-                {
-                    total += offerBTotal + (outOfOfferB * priceTable[itemB]);
-                }
+                
             }
 
             return total;
         }
+
+        public static int ComputeDiscountPriceSingle(int n, int price, int min, int offerPrice)
+        {
+            int nOutOfOffer = n % min;
+            int totalPrice = 0;
+
+            if (n >= min && nOutOfOffer == 0)
+            {
+                totalPrice = n / min * offerPrice;
+            }
+            else if (n > min)
+            {
+                n -= nOutOfOffer;
+                totalPrice = (nOutOfOffer * price) + (n / min * offerPrice);
+            }
+            else
+            {
+                totalPrice = n * price;
+            }
+
+            return totalPrice;
+        }
+
+        public static int ComputeDiscountPriceMulti(int n, int price, List<Offer> offers)
+        {
+            int nOutOfOffer = 0;
+            int totalPrice = 0;
+
+            foreach (Offer offer in offers)
+            {
+                if (n >= offer.Quantity)
+                {
+                    nOutOfOffer = n % offer.Quantity == 0 ? 0 : n % offer.Quantity;
+                    if (nOutOfOffer == 0)
+                    {
+                        totalPrice += n / offer.Quantity * offer.Price;
+                        n = 0;
+                    }
+                    else
+                    {
+                        n -= nOutOfOffer;
+                        totalPrice += n / offer.Quantity * offer.Price;
+                        n = nOutOfOffer;
+                    }
+                }
+                else if (n >= offers.Min(o => o.Quantity))
+                {
+                    continue;
+                }
+                if (n > 0 && n < offers.Min(o => o.Quantity))
+                {
+                    totalPrice += n * price;
+                    break;
+                }
+            }
+
+            return totalPrice;
+        }
+
+        public static int ComputeBOGOFDiscount(int n, int price, int min, int offerPrice)
+        {
+            int nOutOfOffer = n % min;
+            int totalPrice = 0;
+
+            if (n >= min && nOutOfOffer == 0)
+            {
+                totalPrice = (n * price) - (n / min * offerPrice);
+            }
+            else if (n > min)
+            {
+                totalPrice = (n * price) - ((n - nOutOfOffer) / min * offerPrice);
+            }
+            else
+            {
+                totalPrice = n * price;
+            }
+
+            return totalPrice;
+        }
+
+
     }
 }
