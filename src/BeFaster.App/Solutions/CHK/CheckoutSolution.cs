@@ -79,6 +79,10 @@ namespace BeFaster.App.Solutions.CHK
                         {
                             total += ComputeBOGOFDiscount(itemQuantities[item.Key.ItemCode], item.Value, min, offerValue);
                         }
+                        else if (match && !skus.Contains(matchItem))
+                        {
+                            total += item.Value * itemQuantities[item.Key.ItemCode];
+                        }
                         else
                         {
                             total += ComputeDiscountPriceSingle(itemQuantities[item.Key.ItemCode], item.Value, min, offerValue);
@@ -179,5 +183,6 @@ namespace BeFaster.App.Solutions.CHK
 
     }
 }
+
 
 
