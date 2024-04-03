@@ -16,6 +16,7 @@ namespace BeFaster.App.Solutions.CHK
 
         public int ItemPrice { get { return itemPrice; } }
 
-        public Dictionary<int, int> SpecialOffers { get; } = new Dictionary<int, int>();
+        public List<Offer> SpecialOffers { get; } = new List<Offer>();
     }
 }
+

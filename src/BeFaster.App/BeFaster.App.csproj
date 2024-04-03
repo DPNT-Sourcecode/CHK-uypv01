@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="SendCommandToServer.cs" />
     <Compile Include="Solutions\CHK\CheckoutSolution.cs" />
+    <Compile Include="Solutions\CHK\Offer.cs" />
     <Compile Include="Solutions\CHK\ItemC.cs" />
     <Compile Include="Solutions\CHK\ItemE .cs" />
     <Compile Include="Solutions\CHK\ItemD.cs" />
