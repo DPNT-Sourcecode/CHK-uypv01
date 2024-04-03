@@ -71,6 +71,7 @@ namespace BeFaster.App.Solutions.CHK
                             {
                                 match = true;
                                 matchItem = i.Key.ItemCode.ToString();
+                                break;
                             }
                         }
 
@@ -167,6 +168,10 @@ namespace BeFaster.App.Solutions.CHK
             {
                 totalPrice = (n * price) - ((n - nOutOfOffer) / min * offerPrice);
             }
+            else
+            {
+                totalPrice = n * price;
+            }
 
             return totalPrice;
         }
@@ -174,4 +179,5 @@ namespace BeFaster.App.Solutions.CHK
 
     }
 }
+
 
