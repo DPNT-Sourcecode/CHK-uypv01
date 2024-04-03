@@ -48,7 +48,17 @@ namespace BeFaster.App.Solutions.CHK
                 }
             }
 
+            foreach (var item in priceTable)
+            {
+                if (item.Key.SpecialOffers.Count == 0)
+                {
+                    total += item.Value * itemQuantities[item.Key.ItemCode];
+                }
+                else
+                {
 
+                }
+            }
 
 
 
@@ -101,5 +111,28 @@ namespace BeFaster.App.Solutions.CHK
 
             return total;
         }
+
+        public static int ComputeDiscountPriceSingle(int n, int price, int min, int offerPrice)
+        {
+            int nOutOfOffer = n % min;
+            int totalPrice = 0;
+
+            if (n >= min && nOutOfOffer == 0)
+            {
+                totalPrice = n / min * offerPrice;
+            }
+            else if (n > min)
+            {
+                n -= nOutOfOffer;
+                totalPrice += (nOutOfOffer * price) + (n / min * offerPrice);
+            }
+            else
+            {
+                totalPrice = n * price;
+            }
+
+            return totalPrice;
+        }
     }
 }
+
