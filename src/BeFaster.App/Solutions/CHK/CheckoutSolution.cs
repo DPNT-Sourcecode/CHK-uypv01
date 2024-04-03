@@ -130,12 +130,18 @@ namespace BeFaster.App.Solutions.CHK
                     if (nOutOfOffer == 0)
                     {
                         totalPrice += n / offer.Quantity * offer.Price;
+                        n = 0;
                     }
                     else
                     {
                         n -= nOutOfOffer;
                         totalPrice += n / offer.Quantity * offer.Price;
+                        n = nOutOfOffer;
                     }
+                }
+                else if (n >= offers.Min(o => o.Quantity))
+                {
+                    continue;
                 }
                 else
                 {
@@ -168,5 +174,6 @@ namespace BeFaster.App.Solutions.CHK
 
     }
 }
+
 
 
