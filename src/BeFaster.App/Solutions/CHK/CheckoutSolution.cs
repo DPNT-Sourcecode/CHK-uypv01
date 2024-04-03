@@ -32,10 +32,11 @@ namespace BeFaster.App.Solutions.CHK
                 itemQuantities.Add(item.Key.ItemCode, 0);
             }
 
-            itemA.SpecialOffers.Add(3, 130);
-            itemA.SpecialOffers.Add(5, 200);
-            itemB.SpecialOffers.Add(2, 45);
-            itemE.SpecialOffers.Add(2, itemB.ItemPrice);
+            itemA.SpecialOffers.Add(new Offer() { Quantity = 3, Price = 130 } );
+            itemA.SpecialOffers.Add(new Offer() { Quantity = 5, Price = 200 } );
+            itemB.SpecialOffers.Add(new Offer() { Quantity = 2, Price = 45 } );
+            itemE.SpecialOffers.Add(new Offer() { Quantity = 2, Price = itemB.ItemPrice } );
+
 
             foreach (char item in skus)
             {
@@ -57,8 +58,8 @@ namespace BeFaster.App.Solutions.CHK
                 }
                 else if (item.Key.SpecialOffers.Count == 1)
                 {
-                    int min = item.Key.SpecialOffers.Keys.Single();
-                    int offerValue = item.Key.SpecialOffers.Values.Single();
+                    int min = item.Key.SpecialOffers[0].Quantity;
+                    int offerValue = item.Key.SpecialOffers[0].Price;
                     bool match = false;
                     string matchItem = "";
 
@@ -73,50 +74,19 @@ namespace BeFaster.App.Solutions.CHK
 
                     if (match && skus.Contains(matchItem))
                     {
-                        ComputeBOGOFDiscount(itemQuantities[item.Key.ItemCode], item.Value, min, item.Key.SpecialOffers[min]);
+                        ComputeBOGOFDiscount(itemQuantities[item.Key.ItemCode], item.Value, min, offerValue);
                     }
                     else
                     {
-                        ComputeDiscountPriceSingle(itemQuantities[item.Key.ItemCode], item.Value, min, item.Key.SpecialOffers[min]);
+                        ComputeDiscountPriceSingle(itemQuantities[item.Key.ItemCode], item.Value, min, offerValue);
                     }   
                 }
                 else
                 {
-                    ComputeDiscountPriceMulti(itemQuantities[item.Key.ItemCode], item.Value, min, item.Key.SpecialOffers[min]);
+                    item.Key.SpecialOffers.OrderBy(i => i.Quantity + i.Price).ToList();
+                    ComputeDiscountPriceMulti(itemQuantities[item.Key.ItemCode], item.Value, item.Key.SpecialOffers);
                 }
             }
-
-            if (totalAs != 0)
-            {
-
-                int outOfOfferA = 0;
-                int offerAtotal = 0;
-
-                //I don't really like using this method of hardcoding numbers, 
-                //but I would need more time to think about how best to do this and would normally refactor later
-                if (totalAs % 3 == 0 && totalAs % 5 == 0)
-                {
-                    offerAtotal += totalAs / 5 * itemA.SpecialOffers[5];
-                }
-                else 
-                {
-                    foreach (var offer in itemA.SpecialOffers)
-                    {
-
-                    }
-                }
-
-
-                if (outOfOfferA == 0)
-                {
-                    total += offerATotal;
-                }
-                else
-                {
-                    total += offerATotal + (outOfOfferA * priceTable[itemA]);
-                }
-            }
-
 
             return total;
         }
@@ -143,10 +113,31 @@ namespace BeFaster.App.Solutions.CHK
             return totalPrice;
         }
 
-        public static int ComputeDiscountPriceMulti(int n, int price, int min, int offerPrice)
+        public static int ComputeDiscountPriceMulti(int n, int price, List<Offer> offers)
         {
-            int nOutOfOffer = n % min;
+            int nOutOfOffer = 0;
             int totalPrice = 0;
+
+            foreach (Offer offer in offers)
+            {
+                if (n >= offer.Quantity)
+                {
+                    nOutOfOffer = n % offer.Quantity == 0 ? 0 : n % offer.Quantity;
+                    if (nOutOfOffer == 0)
+                    {
+                        totalPrice += n / offer.Quantity * offer.Price;
+                    }
+                    else
+                    {
+                        n -= nOutOfOffer;
+                        totalPrice += n / offer.Quantity * offer.Price;
+                    }
+                }
+                else
+                {
+                    totalPrice += n * price;
+                }
+            }
 
 
             return totalPrice;
@@ -172,3 +163,4 @@ namespace BeFaster.App.Solutions.CHK
 
     }
 }
+
