@@ -9,6 +9,7 @@ namespace BeFaster.App.Solutions.CHK
     public class Offer
     {
         public int Quantity;
-        public int OfferPrice;
+        public int Price;
     }
 }
+
