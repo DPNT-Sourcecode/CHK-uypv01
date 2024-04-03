@@ -34,7 +34,7 @@ namespace BeFaster.App.Solutions.CHK
             itemA.SpecialOffers.Add(3, 130);
             itemA.SpecialOffers.Add(5, 200);
             itemB.SpecialOffers.Add(2, 45);
-            itemE.SpecialOffers.Add(2, 30);
+            itemE.SpecialOffers.Add(2, itemB.ItemPrice);
 
             foreach (char item in skus)
             {
@@ -54,14 +54,11 @@ namespace BeFaster.App.Solutions.CHK
                 {
                     total += item.Value * itemQuantities[item.Key.ItemCode];
                 }
-                else
+                else if (itemQuantities[item.Key.ItemCode] is )
                 {
 
                 }
             }
-
-
-
 
             if (totalAs != 0)
             {
@@ -94,20 +91,6 @@ namespace BeFaster.App.Solutions.CHK
                 }
             }
 
-            if (totalBs != 0)
-            {
-                int outOfOfferB = totalBs % specialOffers[itemB].Item1;
-                int offerBTotal = totalBs / specialOffers[itemB].Item1 * specialOffers[itemB].Item2;
-
-                if (outOfOfferB == 0)
-                {
-                    total += offerBTotal;
-                }
-                else
-                {
-                    total += offerBTotal + (outOfOfferB * priceTable[itemB]);
-                }
-            }
 
             return total;
         }
@@ -133,6 +116,9 @@ namespace BeFaster.App.Solutions.CHK
 
             return totalPrice;
         }
+
+
     }
 }
+
 
