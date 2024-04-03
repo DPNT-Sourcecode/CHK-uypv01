@@ -9,8 +9,11 @@ using BeFaster.App;
 namespace BeFaster.App.Tests.Solutions.CHK
 {
     [TextFixture]
-    class Test
+
+    public class Test
     {
+
     }
 }
+
 
