@@ -58,11 +58,31 @@ namespace BeFaster.App.Solutions.CHK
                 else if (item.Key.SpecialOffers.Count == 1)
                 {
                     int min = item.Key.SpecialOffers.Keys.Single();
-                    ComputeDiscountPriceSingle(itemQuantities[item.Key.ItemCode], item.Value, min, item.Key.SpecialOffers[min]);
+                    int offerValue = item.Key.SpecialOffers.Values.Single();
+                    bool match = false;
+                    string matchItem = "";
+
+                    foreach (var i in priceTable)
+                    {
+                        if (i.Value == offerValue)
+                        {
+                            match = true;
+                            matchItem = i.Key.ItemCode.ToString();
+                        }
+                    }
+
+                    if (match && skus.Contains(matchItem))
+                    {
+                        ComputeBOGOFDiscount(itemQuantities[item.Key.ItemCode], item.Value, min, item.Key.SpecialOffers[min]);
+                    }
+                    else
+                    {
+                        ComputeDiscountPriceSingle(itemQuantities[item.Key.ItemCode], item.Value, min, item.Key.SpecialOffers[min]);
+                    }   
                 }
                 else
                 {
-
+                    ComputeDiscountPriceMulti(itemQuantities[item.Key.ItemCode], item.Value, min, item.Key.SpecialOffers[min]);
                 }
             }
 
@@ -113,12 +133,21 @@ namespace BeFaster.App.Solutions.CHK
             else if (n > min)
             {
                 n -= nOutOfOffer;
-                totalPrice += (nOutOfOffer * price) + (n / min * offerPrice);
+                totalPrice = (nOutOfOffer * price) + (n / min * offerPrice);
             }
             else
             {
                 totalPrice = n * price;
             }
+
+            return totalPrice;
+        }
+
+        public static int ComputeDiscountPriceMulti(int n, int price, int min, int offerPrice)
+        {
+            int nOutOfOffer = n % min;
+            int totalPrice = 0;
+
 
             return totalPrice;
         }
@@ -130,16 +159,11 @@ namespace BeFaster.App.Solutions.CHK
 
             if (n >= min && nOutOfOffer == 0)
             {
-                totalPrice = n / min * offerPrice;
+                totalPrice = (n * price) - (n / min * offerPrice);
             }
             else if (n > min)
             {
-                n -= nOutOfOffer;
-                totalPrice += (nOutOfOffer * price) + (n / min * offerPrice);
-            }
-            else
-            {
-                totalPrice = n * price;
+                totalPrice = (n * price) - ((n - nOutOfOffer) / min * offerPrice);
             }
 
             return totalPrice;
@@ -148,3 +172,4 @@ namespace BeFaster.App.Solutions.CHK
 
     }
 }
+
