@@ -19,4 +19,3 @@ namespace BeFaster.App.Solutions.CHK
         public Dictionary<int, int> SpecialOffers { get; } = new Dictionary<int, int>();
     }
 }
-
