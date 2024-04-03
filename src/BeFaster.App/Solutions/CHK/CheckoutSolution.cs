@@ -143,7 +143,7 @@ namespace BeFaster.App.Solutions.CHK
                 {
                     continue;
                 }
-                else
+                if (n > 0 && n <= offers.Min(o => o.Quantity))
                 {
                     totalPrice += n * price;
                     break;
@@ -174,6 +174,3 @@ namespace BeFaster.App.Solutions.CHK
 
     }
 }
-
-
-
