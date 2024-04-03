@@ -85,7 +85,7 @@ namespace BeFaster.App.Solutions.CHK
                     }
                     else
                     {
-                        item.Key.SpecialOffers = item.Key.SpecialOffers.OrderBy(i => i.Quantity + i.Price).ToList();
+                        item.Key.SpecialOffers = item.Key.SpecialOffers.OrderBy(i => i.Price / i.Quantity).ToList();
                         total += ComputeDiscountPriceMulti(itemQuantities[item.Key.ItemCode], item.Value, item.Key.SpecialOffers);
                     }
                 }
@@ -140,6 +140,7 @@ namespace BeFaster.App.Solutions.CHK
                 else
                 {
                     totalPrice += n * price;
+                    break;
                 }
             }
 
@@ -167,4 +168,5 @@ namespace BeFaster.App.Solutions.CHK
 
     }
 }
+
 
