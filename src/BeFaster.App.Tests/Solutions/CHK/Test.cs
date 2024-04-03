@@ -20,14 +20,10 @@ namespace BeFaster.App.Tests.Solutions.CHK
         [Test]
         public void test1()
         {
-            foreach (var str in testStr)
-            {
-                CheckoutSolution.ComputePrice(str);
-            }
+            Assert.AreEqual(CheckoutSolution.ComputePrice(testStr[0]), 50);
+            Assert.AreEqual(CheckoutSolution.ComputePrice(testStr[1]), 30);
+
         }
 
     }
 }
-
-
-
