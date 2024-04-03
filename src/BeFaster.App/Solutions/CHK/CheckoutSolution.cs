@@ -15,54 +15,43 @@ namespace BeFaster.App.Solutions.CHK
             ItemE itemE = new ItemE();
 
             int total = 0;
-            int totalAs = 0;
-            int totalBs = 0;
 
-            List<IItem> itemList = new List<IItem>
+            Dictionary<IItem, int> priceTable = new Dictionary<IItem, int>()
             {
-                itemA,
-                itemB,
-                itemC,
-                itemD,
-                itemE
+                { itemA, itemA.ItemPrice },
+                { itemB, itemB.ItemPrice },
+                { itemC, itemC.ItemPrice },
+                { itemD, itemD.ItemPrice },
+                { itemE, itemE.ItemPrice }
             };
 
-            Dictionary<char, int> priceTable = new Dictionary<char, int>();
-            foreach (IItem item in itemList)
+            Dictionary<char, int> itemQuantities = new Dictionary<char, int>();
+            foreach (var item in priceTable)
             {
-                priceTable.Add(item.ItemCode, item.ItemPrice);
+                itemQuantities.Add(item.Key.ItemCode, 0);
             }
 
             itemA.SpecialOffers.Add(3, 130);
             itemA.SpecialOffers.Add(5, 200);
-
             itemB.SpecialOffers.Add(2, 45);
-
             itemE.SpecialOffers.Add(2, 30);
-
 
             foreach (char item in skus)
             {
-                if (!priceTable.ContainsKey(item))
+                if (!itemQuantities.ContainsKey(item))
                 {
                     return -1;
                 }
-                else
+                else if (itemQuantities.ContainsKey(item))
                 {
-                    if (priceTable.ContainsKey(item))
-                    {
-                        if (item == itemA.ItemCode|| item == itemB.ItemCode)
-                        {
-                            totalAs += item == itemA.ItemCode ? 1 : 0;
-                            totalBs += item == itemB.ItemCode ? 1 : 0;
-                        }
-                        else
-                        {
-                            total += priceTable[item];
-                        }
-                    }
+                    itemQuantities[item] += 1;
                 }
             }
+
+
+
+
+
 
             if (totalAs != 0)
             {
@@ -114,3 +103,4 @@ namespace BeFaster.App.Solutions.CHK
         }
     }
 }
+
