@@ -27,4 +27,3 @@ namespace BeFaster.App.Solutions.CHK
         List<Offer> SpecialOffers { get; }
     }
 }
-
