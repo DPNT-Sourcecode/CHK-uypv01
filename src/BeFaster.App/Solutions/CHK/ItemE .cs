@@ -10,7 +10,7 @@ namespace BeFaster.App.Solutions.CHK
     {
         private const char itemCode = 'E';
 
-        private const int itemPrice = 15;
+        private const int itemPrice = 40;
 
         public char ItemCode { get { return itemCode; } }
 
@@ -19,3 +19,4 @@ namespace BeFaster.App.Solutions.CHK
         public List<Offer> SpecialOffers { get; } = new List<Offer>();
     }
 }
+
